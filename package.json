@@ -2,7 +2,7 @@
   "name": "watch-eth",
   "version": "0.0.1",
   "description": "Robust library for listening to Etheruem events",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "npm run test.unit",
     "test.unit": "mocha --require ts-node/register 'test/unit/**/*.ts'",
