@@ -44,10 +44,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var setup_1 = require("../setup");
+var mockEth = __importStar(require("../mock/eth-provider"));
 var event_watcher_1 = require("../../src/event-watcher");
 var models_1 = require("../../src/models");
-var mockEth = __importStar(require("../mock/eth-provider"));
 var utils_1 = require("../../src/utils");
+/**
+ * Small class for spying on listeners.
+ */
 var ListenerSpy = /** @class */ (function () {
     function ListenerSpy() {
     }

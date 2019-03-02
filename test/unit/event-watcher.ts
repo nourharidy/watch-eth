@@ -1,9 +1,13 @@
 import { should } from '../setup'
+import * as mockEth from '../mock/eth-provider'
+
 import { EventWatcher } from '../../src/event-watcher'
 import { EventFilterOptions, EventLog } from '../../src/models'
-import * as mockEth from '../mock/eth-provider'
 import { sleep } from '../../src/utils'
 
+/**
+ * Small class for spying on listeners.
+ */
 class ListenerSpy {
   public args: EventLog[]
   public listener(args: EventLog[]): void {
