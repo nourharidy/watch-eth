@@ -57,9 +57,7 @@ describe('EventWatcher', () => {
 
   describe('subscribe', () => {
     it('should allow a user to subscribe to an event', () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const listener = () => {
         return
       }
@@ -69,9 +67,7 @@ describe('EventWatcher', () => {
     })
 
     it('should allow a user to subscribe twice with the same listener', () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const listener = () => {
         return
       }
@@ -85,9 +81,7 @@ describe('EventWatcher', () => {
 
   describe('unsubscribe', () => {
     it('should allow a user to unsubscribe from an event', () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const listener = () => {
         return
       }
@@ -98,9 +92,7 @@ describe('EventWatcher', () => {
     })
 
     it('should allow a user to unsubscribe even if not subscribed', () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const listener = () => {
         return
       }
@@ -111,9 +103,7 @@ describe('EventWatcher', () => {
     })
 
     it('should still be polling if other listeners exist', () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const listener1 = () => {
         return true
       }
@@ -130,9 +120,7 @@ describe('EventWatcher', () => {
 
   describe('events', () => {
     it('should alert a listener when it hears an event', async () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const spy = new ListenerSpy()
 
       // Mock out the events that will be returned.
@@ -152,9 +140,7 @@ describe('EventWatcher', () => {
     })
 
     it('should alert multiple listeners on the same event', async () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const spy1 = new ListenerSpy()
       const spy2 = new ListenerSpy()
 
@@ -177,9 +163,7 @@ describe('EventWatcher', () => {
     })
 
     it('should only alert the same event once', async () => {
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const spy = new ListenerSpy()
 
       // Mock out the events that will be returned.
@@ -202,9 +186,7 @@ describe('EventWatcher', () => {
       // Create a new watcher with a finality depth of 12.
       watcher = createWatcher(12)
 
-      const filter: EventFilterOptions = {
-        event: 'TestEvent',
-      }
+      const filter = 'TestEvent'
       const spy = new ListenerSpy()
 
       // Mock out the events that will be returned.

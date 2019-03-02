@@ -81,14 +81,18 @@ export class EventWatcher extends EventEmitter {
    * @param listener Function to be called when the event is triggered.
    */
   public subscribe(
-    options: EventFilterOptions,
+    options: EventFilterOptions | string,
     listener: (...args: any) => any
   ): void {
     // Start polling if we haven't already.
     this.startPolling()
 
-    // Store the filter.
-    const filter = new EventFilter(options)
+    const filter =
+      typeof options === 'string'
+        ? new EventFilter({
+            event: options,
+          })
+        : new EventFilter(options)
 
     // Initialize the subscriber if it doesn't exist.
     if (!(filter.hash in this.subscriptions)) {
@@ -108,10 +112,15 @@ export class EventWatcher extends EventEmitter {
    * @param listener Function that was used to subscribe.
    */
   public unsubscribe(
-    options: EventFilterOptions,
+    options: EventFilterOptions | string,
     listener: (...args: any) => any
   ): void {
-    const filter = new EventFilter(options)
+    const filter =
+      typeof options === 'string'
+        ? new EventFilter({
+            event: options,
+          })
+        : new EventFilter(options)
     const subscription = this.subscriptions[filter.hash]
 
     // Can't unsubscribe if we aren't subscribed in the first place.

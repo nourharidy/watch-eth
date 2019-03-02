@@ -118,8 +118,9 @@ var EventWatcher = /** @class */ (function (_super) {
     EventWatcher.prototype.subscribe = function (options, listener) {
         // Start polling if we haven't already.
         this.startPolling();
-        // Store the filter.
-        var filter = new models_1.EventFilter(options);
+        var filter = (typeof options === 'string') ? new models_1.EventFilter({
+            event: options
+        }) : new models_1.EventFilter(options);
         // Initialize the subscriber if it doesn't exist.
         if (!(filter.hash in this.subscriptions)) {
             this.subscriptions[filter.hash] = {
@@ -136,7 +137,9 @@ var EventWatcher = /** @class */ (function (_super) {
      * @param listener Function that was used to subscribe.
      */
     EventWatcher.prototype.unsubscribe = function (options, listener) {
-        var filter = new models_1.EventFilter(options);
+        var filter = (typeof options === 'string') ? new models_1.EventFilter({
+            event: options
+        }) : new models_1.EventFilter(options);
         var subscription = this.subscriptions[filter.hash];
         // Can't unsubscribe if we aren't subscribed in the first place.
         if (subscription === undefined) {
