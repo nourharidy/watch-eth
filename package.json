@@ -13,15 +13,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run compile && npm run test && lint-staged"
+      "pre-commit": "npm run compile && npm run test && lint-staged && git add build/"
     }
   },
   "lint-staged": {
     "{src,test}/**/*.{ts,json},index.ts": [
       "prettier --write",
-      "git add"
-    ],
-    "{build}/**/*.ts": [
       "git add"
     ]
   },
