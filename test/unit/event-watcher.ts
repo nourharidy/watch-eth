@@ -15,30 +15,39 @@ class ListenerSpy {
   }
 }
 
+/**
+ * Helper function for creating a watcher instance.
+ * @param finalityDepth Number of blocks before the event is final.
+ * @returns the watcher instance.
+ */
+const createWatcher = (finalityDepth = 0) => {
+  return new EventWatcher({
+    address: '0x0',
+    abi: [
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: false,
+            name: '_value',
+            type: 'uint256',
+          },
+        ],
+        name: 'TestEvent',
+        type: 'event',
+      },
+    ],
+    finalityDepth,
+    pollInterval: 0,
+    eth: mockEth.eth,
+  })
+}
+
 describe('EventWatcher', () => {
   let watcher: EventWatcher
 
   beforeEach(() => {
-    watcher = new EventWatcher({
-      address: '0x0',
-      abi: [
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              name: '_value',
-              type: 'uint256',
-            },
-          ],
-          name: 'TestEvent',
-          type: 'event',
-        },
-      ],
-      finalityDepth: 0,
-      pollInterval: 0,
-      eth: mockEth.eth,
-    })
+    watcher = createWatcher()
   })
 
   afterEach(() => {
@@ -182,6 +191,39 @@ describe('EventWatcher', () => {
 
       // Subscribe for new events.
       watcher.subscribe(filter, spy.listener.bind(spy))
+
+      // Wait for events to be detected.
+      await sleep(10)
+
+      spy.args.should.deep.equal([event])
+    })
+
+    it('should only alert once an event is final', async () => {
+      // Create a new watcher with a finality depth of 12.
+      watcher = createWatcher(12)
+
+      const filter: EventFilterOptions = {
+        event: 'TestEvent',
+      }
+      const spy = new ListenerSpy()
+
+      // Mock out the events that will be returned.
+      const event: EventLog = new EventLog({
+        transactionHash: '0x123',
+        logIndex: 0,
+      })
+      mockEth.setEvents([event])
+
+      // Subscribe for new events.
+      watcher.subscribe(filter, spy.listener.bind(spy))
+
+      // Wait for events to be detected.
+      await sleep(10)
+
+      should.not.exist(spy.args)
+
+      // Move time forward.
+      mockEth.setBlock(20)
 
       // Wait for events to be detected.
       await sleep(10)

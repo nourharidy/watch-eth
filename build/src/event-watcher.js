@@ -204,7 +204,7 @@ var EventWatcher = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.eth.getCurrentBlock()];
                     case 2:
                         block = _a.sent();
-                        lastFinalBlock = Math.max(0, block - this.options.finalityDepth);
+                        lastFinalBlock = Math.max(-1, block - this.options.finalityDepth);
                         // Check all subscribed events.
                         return [4 /*yield*/, Promise.all(Object.values(this.subscriptions).map(function (subscription) {
                                 return _this.checkEvent(subscription.filter, lastFinalBlock);

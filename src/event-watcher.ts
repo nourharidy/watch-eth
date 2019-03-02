@@ -165,7 +165,7 @@ export class EventWatcher extends EventEmitter {
 
     // We only want to query final blocks, so we look a few blocks in the past.
     const block = await this.eth.getCurrentBlock()
-    const lastFinalBlock = Math.max(0, block - this.options.finalityDepth)
+    const lastFinalBlock = Math.max(-1, block - this.options.finalityDepth)
 
     // Check all subscribed events.
     await Promise.all(
