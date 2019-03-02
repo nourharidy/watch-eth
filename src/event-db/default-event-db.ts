@@ -1,8 +1,8 @@
 import { BaseEventDB } from './base-event-db'
 
 export class DefaultEventDB implements BaseEventDB {
-  private lastLogged: { [key: string]: number }
-  private seen: { [key: string]: boolean }
+  private lastLogged: { [key: string]: number } = {}
+  private seen: { [key: string]: boolean } = {}
 
   /**
    * Returns the last logged block for an event.
@@ -10,7 +10,7 @@ export class DefaultEventDB implements BaseEventDB {
    * @returns last logged block for that event.
    */
   public async getLastLoggedBlock(event: string): Promise<number> {
-    return this.lastLogged[event]
+    return this.lastLogged[event] || -1
   }
 
   /**

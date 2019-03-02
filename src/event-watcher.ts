@@ -23,8 +23,6 @@ export interface EventWatcherOptions {
 const defaultOptions = {
   finalityDepth: 12,
   pollInterval: 10000,
-  eth: new DefaultEthProvider(),
-  db: new DefaultEventDB(),
 }
 
 /**
@@ -35,19 +33,26 @@ export class EventWatcher extends EventEmitter {
   private eth: BaseEthProvider
   private db: BaseEventDB
   private polling = false
-  private subscriptions: { [key: string]: EventSubscription }
+  private subscriptions: { [key: string]: EventSubscription } = {}
 
   constructor(options: EventWatcherOptions) {
     super()
 
     options = {
-      ...options,
       ...defaultOptions,
+      ...options,
     }
 
-    this.eth = options.eth
-    this.db = options.db
+    this.eth = options.eth || new DefaultEthProvider()
+    this.db = options.db || new DefaultEventDB()
     this.options = options
+  }
+
+  /**
+   * @returns `true` if polling, `false` otherwise.
+   */
+  get isPolling(): boolean {
+    return this.polling
   }
 
   /**
@@ -180,8 +185,8 @@ export class EventWatcher extends EventEmitter {
     lastFinalBlock: number
   ): Promise<void> {
     // Figure out the last block we've seen.
-    const lastLoggedBLock = await this.db.getLastLoggedBlock(filter.hash)
-    const firstUnsyncedBlock = lastLoggedBLock + 1
+    const lastLoggedBlock = await this.db.getLastLoggedBlock(filter.hash)
+    const firstUnsyncedBlock = lastLoggedBlock + 1
 
     // Don't do anything if we've already seen the latest final block.
     if (firstUnsyncedBlock > lastFinalBlock) {
@@ -213,6 +218,17 @@ export class EventWatcher extends EventEmitter {
    * @returns any events we haven't seen already.
    */
   private async getUniqueEvents(events: EventLog[]): Promise<EventLog[]> {
+    // Filter out duplicated events.
+    events = events.filter((event, index, self) => {
+      return (
+        index ===
+        self.findIndex((e) => {
+          return e.hash === event.hash
+        })
+      )
+    })
+
+    // Filter out events we've already seen.
     const isUnique = await Promise.all(
       events.map(async (event) => {
         return !(await this.db.getEventSeen(event.hash))
