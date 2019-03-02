@@ -1,0 +1,29 @@
+{
+  "name": "watch-eth",
+  "version": "0.0.1",
+  "description": "Robust library for listening to Etheruem events",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "prettier --check '{src,test}/**/*.ts'",
+    "fix": "prettier --write '{src,test}/**/*.ts'",
+    "postinstall": "rm ./node_modules/web3/types/index.d.ts"
+  },
+  "keywords": [
+    "ethereum",
+    "events"
+  ],
+  "author": "Plasma Group",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^11.10.0",
+    "web3": "^1.0.0-beta.47"
+  },
+  "devDependencies": {
+    "@types/web3": "^1.0.18",
+    "prettier": "^1.16.4",
+    "tslint": "^5.13.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1"
+  }
+}
